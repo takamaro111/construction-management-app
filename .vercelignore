@@ -1,0 +1,10 @@
+# Supabase関連ファイルを除外
+supabase/
+*.sql
+
+# その他の不要なファイル
+.env.local
+README.md
+.git/
+.gitignore
+out/
