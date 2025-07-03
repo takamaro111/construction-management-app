@@ -1,10 +1,9 @@
-# Supabase関連ファイルを除外
-supabase/
-*.sql
+# Supabase Edge Functions（Deno用）のみ除外
+supabase/functions/
+supabase/.temp/
 
 # その他の不要なファイル
 .env.local
-README.md
-.git/
-.gitignore
 out/
+.next/
+node_modules/
