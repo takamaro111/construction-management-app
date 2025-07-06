@@ -85,6 +85,24 @@ export default function SchedulePage() {
 
   const fetchSchedules = async () => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) {
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { data, error } = await supabase
         .from('schedules')
         .select(`
@@ -93,6 +111,7 @@ export default function SchedulePage() {
           assignee:assigned_to(name),
           creator:created_by(name)
         `)
+        .eq('company_id', userData.company_id)
         .order('start_date', { ascending: true })
 
       if (error) {
@@ -112,9 +131,22 @@ export default function SchedulePage() {
 
   const fetchProjects = async () => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) return
+
       const { data, error } = await supabase
         .from('projects')
         .select('id, name')
+        .eq('company_id', userData.company_id)
         .order('name')
 
       if (error) {
@@ -130,9 +162,22 @@ export default function SchedulePage() {
 
   const fetchUsers = async () => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) return
+
       const { data, error } = await supabase
         .from('users')
         .select('id, name')
+        .eq('company_id', userData.company_id)
         .order('name')
 
       if (error) {
@@ -150,10 +195,29 @@ export default function SchedulePage() {
     if (!confirm('このスケジュールを削除しますか？')) return
 
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) {
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { error } = await supabase
         .from('schedules')
         .delete()
         .eq('id', scheduleId)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('削除に失敗しました')
@@ -169,10 +233,29 @@ export default function SchedulePage() {
 
   const updateScheduleStatus = async (scheduleId: string, newStatus: string) => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) {
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { error } = await supabase
         .from('schedules')
         .update({ status: newStatus })
         .eq('id', scheduleId)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('ステータスの更新に失敗しました')

@@ -48,12 +48,31 @@ export default function ProjectBoardPage() {
 
   const fetchProjects = async () => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) {
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { data, error } = await supabase
         .from('projects')
         .select(`
           *,
           manager:manager_id(name)
         `)
+        .eq('company_id', userData.company_id)
         .order('created_at', { ascending: false })
 
       if (error) {
@@ -71,10 +90,23 @@ export default function ProjectBoardPage() {
 
   const updateProjectStatus = async (projectId: string, newStatus: string) => {
     try {
+      // Get current user's company_id for security
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) return
+
       const { error } = await supabase
         .from('projects')
         .update({ status: newStatus })
         .eq('id', projectId)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('ステータスの更新に失敗しました')

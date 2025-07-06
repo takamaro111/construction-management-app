@@ -122,10 +122,29 @@ export default function DocumentsPage() {
     if (!confirm('この資料を削除しますか？')) return
 
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) {
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { error } = await supabase
         .from('documents')
         .delete()
         .eq('id', documentId)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('削除に失敗しました')
