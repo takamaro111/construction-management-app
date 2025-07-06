@@ -50,6 +50,26 @@ export default function ReportsPage() {
 
   const fetchReports = async () => {
     try {
+      // 認証チェック
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      // ユーザーの会社IDを取得
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (userError || !userData) {
+        console.error('ユーザー情報取得エラー:', userError)
+        toast.error('ユーザー情報の取得に失敗しました')
+        return
+      }
+
       const { data, error } = await supabase
         .from('reports')
         .select(`
@@ -57,6 +77,7 @@ export default function ReportsPage() {
           project:project_id(name),
           author:reported_by(name)
         `)
+        .eq('company_id', userData.company_id)
         .order('report_date', { ascending: false })
 
       if (error) {
@@ -76,9 +97,29 @@ export default function ReportsPage() {
 
   const fetchProjects = async () => {
     try {
+      // 認証チェック
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        console.error('認証が必要です')
+        return
+      }
+
+      // ユーザーの会社IDを取得
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (userError || !userData) {
+        console.error('ユーザー情報取得エラー:', userError)
+        return
+      }
+
       const { data, error } = await supabase
         .from('projects')
         .select('id, name')
+        .eq('company_id', userData.company_id)
         .order('name')
 
       if (error) {
@@ -96,10 +137,30 @@ export default function ReportsPage() {
     if (!confirm('この報告書を削除しますか？')) return
 
     try {
+      // 認証チェック
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      // ユーザーの会社IDを取得
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (userError || !userData) {
+        toast.error('認証エラーが発生しました')
+        return
+      }
+
       const { error } = await supabase
         .from('reports')
         .delete()
         .eq('id', reportId)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('削除に失敗しました')
@@ -493,6 +554,7 @@ function ReportModal({ projects, report, onClose, onSuccess }: {
           .from('reports')
           .update(reportData)
           .eq('id', report.id)
+          .eq('company_id', userData.company_id)
         error = result.error
       } else {
         // 新規作成

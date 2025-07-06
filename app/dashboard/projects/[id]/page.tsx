@@ -41,6 +41,28 @@ export default function ProjectDetailPage() {
 
   const fetchProject = async () => {
     try {
+      // 認証チェック
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        router.push('/auth/login')
+        return
+      }
+
+      // ユーザーの会社IDを取得
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (userError || !userData) {
+        console.error('ユーザー情報取得エラー:', userError)
+        toast.error('ユーザー情報の取得に失敗しました')
+        router.push('/dashboard/projects')
+        return
+      }
+
       const { data, error } = await supabase
         .from('projects')
         .select(`
@@ -49,6 +71,7 @@ export default function ProjectDetailPage() {
           company:company_id(name)
         `)
         .eq('id', params.id)
+        .eq('company_id', userData.company_id)
         .single()
 
       if (error) {
@@ -71,10 +94,30 @@ export default function ProjectDetailPage() {
     if (!confirm('このプロジェクトを削除しますか？')) return
 
     try {
+      // 認証チェック
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        toast.error('認証が必要です')
+        return
+      }
+
+      // ユーザーの会社IDを取得
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (userError || !userData) {
+        toast.error('認証エラーが発生しました')
+        return
+      }
+
       const { error } = await supabase
         .from('projects')
         .delete()
         .eq('id', params.id)
+        .eq('company_id', userData.company_id)
 
       if (error) {
         toast.error('削除に失敗しました')
