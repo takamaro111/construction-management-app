@@ -264,9 +264,9 @@ function ProjectCard({ project, isDragging = false }: { project: Project; isDrag
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all cursor-grab active:cursor-grabbing touch-none"
+      className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200 hover:shadow-md transition-all cursor-grab active:cursor-grabbing touch-none"
     >
-      <h4 className="font-medium text-gray-900 mb-3 text-sm leading-tight">{project.name}</h4>
+      <h4 className="font-medium text-gray-900 mb-3 text-xs sm:text-sm leading-tight">{project.name}</h4>
       
       <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
         <span>
@@ -278,7 +278,7 @@ function ProjectCard({ project, isDragging = false }: { project: Project; isDrag
       
       {project.manager && (
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-300 rounded-full flex items-center justify-center">
             <span className="text-xs text-white font-medium">
               {project.manager.name.charAt(0)}
             </span>
@@ -286,6 +286,38 @@ function ProjectCard({ project, isDragging = false }: { project: Project; isDrag
           <span className="text-xs text-gray-600">{project.manager.name}</span>
         </div>
       )}
+    </div>
+  )
+}
+
+function MobileColumn({ column, projects }: { column: Column; projects: Project[] }) {
+  const { setNodeRef } = useDroppable({ id: column.id })
+  const router = useRouter()
+
+  return (
+    <div 
+      ref={setNodeRef}
+      className={`bg-white rounded-lg shadow-sm border ${column.color} p-4`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-medium text-gray-900 text-sm">{column.title}</h3>
+        <div className="flex items-center gap-1">
+          <span className="text-gray-500 text-sm">{projects.length}件</span>
+          <Plus className="h-4 w-4 text-gray-400 cursor-pointer hover:text-blue-500" />
+        </div>
+      </div>
+      
+      <div className="space-y-3">
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
+        <button 
+          onClick={() => router.push(`/dashboard/projects/new?status=${column.status}`)}
+          className="w-full py-3 text-sm text-gray-500 hover:text-blue-500 border-2 border-dashed border-gray-200 hover:border-blue-300 rounded-lg transition-colors"
+        >
+          + 案件を作成
+        </button>
+      </div>
     </div>
   )
 }

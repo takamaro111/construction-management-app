@@ -367,7 +367,7 @@ function CreateProjectModal({ onClose, onSuccess }: { onClose: () => void, onSuc
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div className="relative top-10 sm:top-20 mx-auto p-4 sm:p-5 border w-full max-w-sm sm:max-w-md shadow-lg rounded-md bg-white m-4">
         <div className="mt-3">
           <h3 className="text-lg font-medium text-gray-900 mb-4">新規案件作成</h3>
           <form onSubmit={handleSubmit} className="space-y-4">

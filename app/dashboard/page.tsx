@@ -109,28 +109,28 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
       {/* ヘッダー */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">ダッシュボード</h1>
-          <p className="text-sm text-gray-500 mt-1">プロジェクトの概要と最新情報</p>
+          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">ダッシュボード</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">プロジェクトの概要と最新情報</p>
         </div>
       </div>
       
       {/* 統計カード */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 mb-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 mb-4 sm:mb-6">
         {statCards.map((card) => {
           const Icon = card.icon
           return (
-            <div key={card.title} className="bg-white rounded-lg shadow-sm p-4">
+            <div key={card.title} className="bg-white rounded-lg shadow-sm p-3 sm:p-4">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-gray-600">{card.title}</p>
-                  <p className="mt-1 text-xl font-semibold text-gray-900">{card.value}</p>
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-gray-600 truncate">{card.title}</p>
+                  <p className="mt-1 text-lg sm:text-xl font-semibold text-gray-900">{card.value}</p>
                 </div>
-                <div className={`${card.bgColor} p-2 rounded`}>
-                  <Icon className={`h-4 w-4 ${card.iconColor}`} />
+                <div className={`${card.bgColor} p-1.5 sm:p-2 rounded flex-shrink-0 ml-2`}>
+                  <Icon className={`h-3 w-3 sm:h-4 sm:w-4 ${card.iconColor}`} />
                 </div>
               </div>
             </div>
@@ -140,35 +140,35 @@ export default function DashboardPage() {
 
       {/* 最近のプロジェクト */}
       <div className="bg-white rounded-lg shadow-sm">
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-3 sm:p-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-medium text-gray-900">最近のプロジェクト</h2>
-            <Link href="/dashboard/projects" className="text-xs text-blue-600 hover:text-blue-700">
+            <Link href="/dashboard/projects" className="text-xs text-blue-600 hover:text-blue-700 whitespace-nowrap">
               すべて表示 →
             </Link>
           </div>
         </div>
         <div className="divide-y divide-gray-200">
           {recentProjects.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Building2 className="mx-auto h-8 w-8 mb-3 text-gray-400" />
-              <p className="text-sm font-medium">プロジェクトがありません</p>
+            <div className="p-6 sm:p-8 text-center text-gray-500">
+              <Building2 className="mx-auto h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-gray-400" />
+              <p className="text-xs sm:text-sm font-medium">プロジェクトがありません</p>
               <p className="text-xs mt-1">新しいプロジェクトを作成しましょう</p>
             </div>
           ) : (
             recentProjects.map((project) => (
-              <div key={project.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div key={project.id} className="p-3 sm:p-4 hover:bg-gray-50 transition-colors">
                 <Link href={`/dashboard/projects/${project.id}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-2 w-2 rounded-full ${
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                      <div className={`h-2 w-2 rounded-full flex-shrink-0 ${
                         project.status === 'in_progress' ? 'bg-orange-500' :
                         project.status === 'completed' ? 'bg-blue-500' :
                         project.status === 'preparing' ? 'bg-blue-500' :
                         'bg-gray-500'
                       }`} />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{project.name}</p>
+                      <div className="min-w-0">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{project.name}</p>
                         <p className="text-xs text-gray-500">
                           {project.status === 'preparing' && '契約前'}
                           {project.status === 'in_progress' && '進行中'}
@@ -177,7 +177,7 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-500 flex-shrink-0">
                       {project.start_date && new Date(project.start_date).toLocaleDateString('ja-JP')}
                     </div>
                   </div>

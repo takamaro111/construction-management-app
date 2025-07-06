@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '../../lib/supabase/client'
-import { User, LogOut, Bell, Calendar, MessageSquare, HelpCircle, X } from 'lucide-react'
+import { User, LogOut, Bell, Calendar, MessageSquare, HelpCircle, X, Menu } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +38,11 @@ const getPageName = (pathname: string) => {
   return pageNames[pathname] || 'ページ'
 }
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const [user, setUser] = useState<any>(null)
   const [showNotifications, setShowNotifications] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
@@ -126,11 +130,18 @@ export function Header() {
 
   return (
     <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-40">
-      <div className="h-full px-6 max-w-full">
+      <div className="h-full px-4 sm:px-6 max-w-full">
         <div className="flex items-center justify-between h-full">
-          {/* ページタイトル */}
-          <div className="flex items-center min-w-0">
-            <h1 className="text-lg font-medium text-gray-900 truncate">{currentPageName}</h1>
+          {/* 左側：メニューボタンとページタイトル */}
+          <div className="flex items-center min-w-0 gap-3">
+            {/* モバイルメニューボタン */}
+            <button
+              onClick={onMenuClick}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors lg:hidden"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <h1 className="text-base sm:text-lg font-medium text-gray-900 truncate">{currentPageName}</h1>
           </div>
 
           {/* 右側メニュー */}

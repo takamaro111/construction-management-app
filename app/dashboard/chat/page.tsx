@@ -313,33 +313,33 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-2 sm:p-4 md:p-6 bg-gray-50 min-h-screen">
       {/* ヘッダー */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <div className="flex items-center justify-between">
+      <div className="bg-white rounded-lg shadow-sm p-3 sm:p-4 md:p-6 mb-4 md:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">チャット</h1>
-            <p className="text-sm text-gray-500 mt-1">プロジェクトメンバーとコミュニケーション</p>
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">チャット</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">プロジェクトメンバーとコミュニケーション</p>
           </div>
           <CreateChatModal projects={projects} onCreateChat={createChat} />
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-16rem)] gap-6">
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-12rem)] sm:h-[calc(100vh-16rem)] gap-2 sm:gap-4 lg:gap-6">
         {/* サイドバー - チャット一覧 */}
-        <div className="w-80 bg-white rounded-lg shadow-sm flex flex-col">
+        <div className="w-full lg:w-80 bg-white rounded-lg shadow-sm flex flex-col max-h-48 lg:max-h-none">
           {/* ヘッダー */}
-          <div className="p-4 border-b border-gray-200">
-            <h2 className="text-sm font-medium text-gray-900">チャット一覧</h2>
+          <div className="p-3 sm:p-4 border-b border-gray-200">
+            <h2 className="text-xs sm:text-sm font-medium text-gray-900">チャット一覧</h2>
           </div>
 
           {/* チャット一覧 */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-2 sm:p-4">
             {chats.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
-                <MessageSquare className="mx-auto h-8 w-8 mb-3 text-gray-400" />
-                <p className="text-sm font-medium">チャットがありません</p>
-                <p className="text-xs mt-1 text-gray-400">新しいチャットを作成してください</p>
+              <div className="text-center text-gray-500 py-4 sm:py-8">
+                <MessageSquare className="mx-auto h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-gray-400" />
+                <p className="text-xs sm:text-sm font-medium">チャットがありません</p>
+                <p className="text-xs mt-1 text-gray-400 hidden sm:block">新しいチャットを作成してください</p>
               </div>
             ) : (
               <div className="space-y-1">
@@ -347,26 +347,26 @@ export default function ChatPage() {
                   <button
                     key={chat.id}
                     onClick={() => setSelectedChat(chat)}
-                    className={`w-full p-3 text-left rounded-md transition-colors ${
+                    className={`w-full p-2 sm:p-3 text-left rounded-md transition-colors ${
                       selectedChat?.id === chat.id 
                         ? 'bg-blue-50 text-blue-700 border border-blue-200' 
                         : 'hover:bg-gray-50 border border-transparent'
                     }`}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
                       <div className="flex-shrink-0">
-                        <div className={`w-8 h-8 rounded flex items-center justify-center ${
+                        <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center ${
                           selectedChat?.id === chat.id 
                             ? 'bg-blue-100' 
                             : 'bg-gray-100'
                         }`}>
-                          <MessageSquare className={`w-4 h-4 ${
+                          <MessageSquare className={`w-3 h-3 sm:w-4 sm:h-4 ${
                             selectedChat?.id === chat.id ? 'text-blue-600' : 'text-gray-500'
                           }`} />
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                           {chat.name}
                         </p>
                         <p className="text-xs text-gray-500 truncate">
@@ -382,29 +382,29 @@ export default function ChatPage() {
         </div>
 
         {/* メインチャットエリア */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col">
+        <div className="flex-1 bg-white rounded-lg shadow-sm flex flex-col min-h-0">
           {selectedChat ? (
             <>
               {/* チャットヘッダー */}
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                    <MessageSquare className="w-4 h-4 text-blue-600" />
+              <div className="p-3 sm:p-4 border-b border-gray-200 flex-shrink-0">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded flex items-center justify-center">
+                    <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">{selectedChat.name}</h3>
+                    <h3 className="text-xs sm:text-sm font-medium text-gray-900">{selectedChat.name}</h3>
                     <p className="text-xs text-gray-500">{selectedChat.project?.name}</p>
                   </div>
                 </div>
               </div>
 
               {/* メッセージエリア */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+              <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-2 sm:space-y-3 bg-gray-50 min-h-0">
                 {messages.length === 0 ? (
-                  <div className="text-center text-gray-500 mt-12">
-                    <MessageSquare className="mx-auto h-8 w-8 mb-3 text-gray-400" />
-                    <p className="text-sm font-medium">まだメッセージがありません</p>
-                    <p className="text-xs mt-1">最初のメッセージを送信しましょう</p>
+                  <div className="text-center text-gray-500 mt-6 sm:mt-12">
+                    <MessageSquare className="mx-auto h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-gray-400" />
+                    <p className="text-xs sm:text-sm font-medium">まだメッセージがありません</p>
+                    <p className="text-xs mt-1 hidden sm:block">最初のメッセージを送信しましょう</p>
                   </div>
                 ) : (
                   messages.map((message) => (
@@ -419,8 +419,8 @@ export default function ChatPage() {
               </div>
 
               {/* メッセージ入力エリア */}
-              <div className="p-4 border-t border-gray-200">
-                <div className="flex items-center space-x-3">
+              <div className="p-2 sm:p-4 border-t border-gray-200 flex-shrink-0">
+                <div className="flex items-center space-x-2 sm:space-x-3">
                   <div className="flex-1">
                     <input
                       type="text"
@@ -428,25 +428,25 @@ export default function ChatPage() {
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="メッセージを入力..."
-                      className="w-full p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full p-2 sm:p-3 border border-gray-300 rounded-md text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <button
                     onClick={sendMessage}
                     disabled={!newMessage.trim()}
-                    className="px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-2 sm:px-4 sm:py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-3 h-3 sm:w-4 sm:h-4" />
                   </button>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center p-4">
               <div className="text-center text-gray-500">
-                <MessageSquare className="mx-auto h-12 w-12 mb-3 text-gray-400" />
-                <h3 className="text-sm font-medium mb-1">チャットを選択してください</h3>
-                <p className="text-xs">左側のリストからチャットを選択するか、新しいチャットを作成してください</p>
+                <MessageSquare className="mx-auto h-8 w-8 sm:h-12 sm:w-12 mb-2 sm:mb-3 text-gray-400" />
+                <h3 className="text-xs sm:text-sm font-medium mb-1">チャットを選択してください</h3>
+                <p className="text-xs hidden sm:block">上のリストからチャットを選択するか、新しいチャットを作成してください</p>
               </div>
             </div>
           )}
@@ -462,10 +462,10 @@ function MessageBubble({ message, isOwn }: {
   isOwn: boolean
 }) {
   return (
-    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-3`}>
-      <div className={`max-w-xs lg:max-w-md ${isOwn ? 'order-1' : 'order-2'}`}>
+    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-2 sm:mb-3`}>
+      <div className={`max-w-xs sm:max-w-sm lg:max-w-md ${isOwn ? 'order-1' : 'order-2'}`}>
         <div
-          className={`px-3 py-2 rounded-lg text-sm ${
+          className={`px-2 py-1 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm ${
             isOwn
               ? 'bg-blue-600 text-white'
               : 'bg-white text-gray-900 border border-gray-200'
@@ -473,7 +473,7 @@ function MessageBubble({ message, isOwn }: {
         >
           <p className="leading-relaxed whitespace-pre-wrap">{message.message}</p>
         </div>
-        <div className={`mt-1 flex items-center space-x-2 text-xs text-gray-500 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+        <div className={`mt-1 flex items-center space-x-1 sm:space-x-2 text-xs text-gray-500 ${isOwn ? 'justify-end' : 'justify-start'}`}>
           {!isOwn && (
             <span className="font-medium text-blue-600">{message.sender?.name}</span>
           )}
@@ -514,15 +514,16 @@ function CreateChatModal({ projects, onCreateChat }: {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center px-3 py-2 text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+        className="inline-flex items-center px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
       >
-        <MessageSquare className="h-4 w-4 mr-1" />
-        新規チャット作成
+        <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+        <span className="hidden sm:inline">新規チャット作成</span>
+        <span className="sm:hidden">新規</span>
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-10 sm:top-20 mx-auto p-4 sm:p-5 border w-full max-w-sm sm:max-w-md shadow-lg rounded-md bg-white m-4">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-4">新しいチャットを作成</h3>
               
