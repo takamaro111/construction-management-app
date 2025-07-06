@@ -157,9 +157,22 @@ export default function ChatPage() {
 
   const fetchProjects = async () => {
     try {
+      // Get current user's company_id
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: userData } = await supabase
+        .from('users')
+        .select('company_id')
+        .eq('id', user.id)
+        .single()
+
+      if (!userData) return
+
       const { data, error } = await supabase
         .from('projects')
         .select('id, name')
+        .eq('company_id', userData.company_id)
         .order('name')
 
       if (error) {
